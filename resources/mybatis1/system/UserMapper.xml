@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="UserMapper">
+
+	<!--表名 -->
+	<sql id="tableName">
+		user
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		userid,
+		username,
+		password,
+		phonenumber,
+		sex
+	</sql>
+
+	<!--配置一个resultMap 指定返回的类型 -->
+    <resultMap id="user" type="User">
+        <id column="userid" property="userid" />
+        <result column="username" property="username" />
+        <result column="password" property="password" />
+        <result column="phonenumber" property="phonenumber" />
+        <result column="sex" property="sex" />
+    </resultMap>
+    
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{userid},
+		#{username},
+		#{password},
+		#{phonenumber},
+		#{sex}
+	</sql>
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" resultType="user">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+	</select>
+</mapper>

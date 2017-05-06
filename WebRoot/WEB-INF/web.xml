@@ -7,7 +7,9 @@
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>
+			classpath:spring/ApplicationContext-dataSource.xml
 			classpath:spring/ApplicationContext-main.xml
+			classpath:spring/ApplicationContext-mvc.xml
 		</param-value>
 	</context-param>
 	<context-param>

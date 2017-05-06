@@ -3,12 +3,12 @@ package com.shuiyujie.controller.base;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
- * @author 弄浪的鱼
- * @date 2017年5月2日
+ * @author 寮勬氮鐨勯奔
+ * @date 2017/5/2
  */
 public class BaseController {
 
-	/**得到ModelAndView
+	/**杩斿洖ModelAndView
 	 * @return
 	 */
 	public ModelAndView getModelAndView(){

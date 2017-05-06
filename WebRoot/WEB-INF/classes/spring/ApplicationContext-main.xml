@@ -24,4 +24,13 @@
 
    	<aop:aspectj-autoproxy proxy-target-class="true"/>
    	
+   	<!-- 读取参数配置 -->
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">  
+		<property name="locations">  
+			<list>  
+                 <value>/WEB-INF/classes/dbconfig.properties</value>
+            </list>  
+        </property>  
+	</bean> 
+   	
 </beans>
