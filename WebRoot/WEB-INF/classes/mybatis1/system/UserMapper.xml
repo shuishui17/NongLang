@@ -36,7 +36,7 @@
 	</sql>
 	
 	<!-- 列表(全部) -->
-	<select id="listAll" resultType="user">
+	<select id="listAll" parameterType="pd" resultType="pd">
 		select
 		<include refid="Field"></include>
 		from 

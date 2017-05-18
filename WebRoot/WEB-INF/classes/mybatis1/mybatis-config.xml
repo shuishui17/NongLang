@@ -13,6 +13,8 @@
 		<!-- 这里添加生成的实体类 -->
 		
 		<typeAlias type="com.shuiyujie.entity.system.User" alias="User"/>
+		<typeAlias type="com.shuiyujie.util.PageData" alias="pd"/>
+		<typeAlias type="com.shuiyujie.entity.Page" alias="page"/>
 		
 		<!-- 添加生成的实体类结束 -->
 		

@@ -10,7 +10,7 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
-@Repository("daoSupport")
+@Repository("daoSupport") //@Repository 用于标注数据访问组件，即DAO组件
 public class DaoSupport implements DAO {
 
 	@Resource(name = "sqlSessionTemplate")

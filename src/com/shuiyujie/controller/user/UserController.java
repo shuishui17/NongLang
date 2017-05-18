@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.shuiyujie.controller.base.BaseController;
+import com.shuiyujie.entity.Page;
 import com.shuiyujie.entity.system.User;
 import com.shuiyujie.service.system.user.UserManager;
+import com.shuiyujie.util.PageData;
 
 /**
  * @author Ū�˵���
@@ -25,13 +27,20 @@ public class UserController extends BaseController{
 	private UserManager userService;
 	
 	@RequestMapping("/list")
-	public ModelAndView list() throws Exception{
-		
-		//列表所有的用户
-		List<User> userList = userService.listAll();
+	public ModelAndView list(Page page) throws Exception{
 		
 		ModelAndView mv = this.getModelAndView();
-		mv.addObject("userList", userList);
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		page.setPd(pd); //用于分页 
+		
+		//列表所有的用户
+		List<PageData> varList = userService.listAll(pd);
+		
+		mv = this.getModelAndView();
+//		mv.addObject("userList", userList);
+		mv.addObject("varList", varList);
+		mv.addObject("pd", pd);
 		mv.setViewName("system/user/user_list");
 		
 		return mv;

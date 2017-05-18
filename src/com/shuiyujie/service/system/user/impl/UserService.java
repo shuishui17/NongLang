@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.shuiyujie.dao.DaoSupport;
 import com.shuiyujie.entity.system.User;
 import com.shuiyujie.service.system.user.UserManager;
+import com.shuiyujie.util.PageData;
 
 /**
  * @author 弄浪的鱼
@@ -24,8 +25,8 @@ public class UserService implements UserManager{
 	 * @see com.shuiyujie.service.system.user.UserManager#listAllUser()
 	 */
 	@Override
-	public List<User> listAll() throws Exception {
-		return (List<User>)dao.findForList("UserMapper.listAll", null);
+	public List<PageData> listAll(PageData pd) throws Exception {
+		return (List<PageData>)dao.findForList("UserMapper.listAll", pd);
 	}
 	
 	

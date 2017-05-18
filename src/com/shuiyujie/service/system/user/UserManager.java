@@ -3,6 +3,7 @@ package com.shuiyujie.service.system.user;
 import java.util.List;
 
 import com.shuiyujie.entity.system.User;
+import com.shuiyujie.util.PageData;
 
 /**用户接口类
  * @author 弄浪的鱼
@@ -15,5 +16,5 @@ public interface UserManager {
 	 * @return 用户列表
 	 * @throws Exception
 	 */
-	public List<User> listAll() throws Exception;
+	public List<PageData> listAll(PageData pd) throws Exception;
 }
