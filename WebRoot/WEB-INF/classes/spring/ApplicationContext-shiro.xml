@@ -22,7 +22,7 @@
 
 	<!-- shiro filter -->
 	<bean id="shiroFilter"
-		class="org.apache.shiro.spring.web.ShiroFilterFactoryBean.class">
+		class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
 		<!-- securityManager 属性必须配置 -->
 		<property name="securityManager" ref="securityManager" />
 		<!-- 未登录用户请求跳转页面 -->

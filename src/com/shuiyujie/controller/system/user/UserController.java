@@ -1,4 +1,4 @@
-package com.shuiyujie.controller.user;
+package com.shuiyujie.controller.system.user;
 
 import java.util.List;
 
