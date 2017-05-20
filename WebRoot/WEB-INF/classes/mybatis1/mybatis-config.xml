@@ -15,6 +15,8 @@
 		<typeAlias type="com.shuiyujie.entity.system.User" alias="User"/>
 		<typeAlias type="com.shuiyujie.util.PageData" alias="pd"/>
 		<typeAlias type="com.shuiyujie.entity.Page" alias="page"/>
+		<typeAlias type="com.shuiyujie.entity.system.Role" alias="role"/>
+		<typeAlias type="com.shuiyujie.entity.system.Menu" alias="menu"/>
 		
 		<!-- 添加生成的实体类结束 -->
 		
