@@ -7,9 +7,9 @@
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>
-			classpath:spring/ApplicationContext-dataSource.xml
-			classpath:spring/ApplicationContext-main.xml
-			classpath:spring/ApplicationContext-mvc.xml
+			classpath:spring/ApplicationContext-main.xml,
+			classpath:spring/ApplicationContext-dataSource.xml,
+			classpath:spring/ApplicationContext-shiro.xml
 		</param-value>
 	</context-param>
 	<context-param>
@@ -60,5 +60,31 @@
 		<servlet-name>springMvc</servlet-name>
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
+	
+	<!-- <error-page>
+		<error-code>404</error-code>
+		<location>/404.jsp</location>
+	</error-page> -->
+	
+	<!-- Shiro filter start -->
+	<filter>
+		<filter-name>shiroFilter</filter-name>
+		<filter-class>
+			org.springframework.web.filter.DelegatingFilterProxy
+		</filter-class>
+		<init-param>
+			<param-name>targetFilterLifecycle</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>shiroFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<!-- Shiro filter end -->
+	
+	<session-config>
+		<session-timeout>600</session-timeout>
+	</session-config>
 	
 </web-app>

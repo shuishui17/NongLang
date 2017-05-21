@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+						http://www.springframework.org/schema/beans/spring-beans.xsd
+						http://www.springframework.org/schema/aop 
+						http://www.springframework.org/schema/aop/spring-aop.xsd
+						http://www.springframework.org/schema/context 
+						http://www.springframework.org/schema/context/spring-context.xsd
+						http://www.springframework.org/schema/tx 
+						http://www.springframework.org/schema/tx/spring-tx.xsd
+	">
+
+	<!-- 第一步配置核心心脏 -->
+	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+		<property name="realm" ref="shiroRealm" />
+	</bean>
+
+	<!-- 自定义 realm 用于校验 -->
+	<bean id="shiroRealm" class="com.shuiyujie.interceptor.shiro.ShiroRealm" />
+
+	<!-- shiro filter -->
+	<bean id="shiroFilter"
+		class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+		<!-- securityManager 属性必须配置 -->
+		<property name="securityManager" ref="securityManager" />
+		<!-- 未登录用户请求跳转页面 -->
+		<property name="loginUrl" value="/" />
+		<!-- 登录成功默认跳转页面 -->
+		<property name="successUrl" value="/main/index" />
+		<!-- 没有权限默认跳转的页面 -->
+		<property name="unauthorizedUrl" value="/login_toLogin" />
+
+		<!-- 配置过滤器 -->
+		<property name="filterChainDefinitions">
+			<value>
+				/static/login/** = anon
+				/plugins/keypad/** = anon
+				/static/js/myjs/** = authc
+				/static/js/** = anon
+				/uploadFiles/uploadImgs/** = anon
+				/code.do = anon
+				/login_login = anon
+				/app**/** = anon
+				/weixin/** = anon
+				/** = authc
+			</value>
+		</property>
+	</bean>
+</beans>
