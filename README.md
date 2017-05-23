@@ -1,5 +1,7 @@
 # NongLang
 
+Spring + Spring Mvc + Mybatis 搭建 JavaWeb 项目。
+
 # shiro 完成认证和授权
 
 利用BigInteger对权限进行2的权的和计算
