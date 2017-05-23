@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -148,7 +149,12 @@ public class LoginController extends BaseController {
 		return AppUtil.returnObject(new PageData(), map);
 	}
 
-	@RequestMapping("/main/{changeMenu}")
+	/**
+	 * 访问系统首页
+	 * @param changeMenu
+	 * @return
+	 */
+	@RequestMapping(value="/main/{changeMenu}")
 	public ModelAndView login_index(
 			@PathVariable("changeMenu") String changeMenu) {
 
@@ -175,10 +181,17 @@ public class LoginController extends BaseController {
 				String roleRights = role != null ? role.getRIGHTS() : "";
 				session.setAttribute(USERNAME + Const.SESSION_ROLE_RIGHTS, roleRights); 	//将角色权限存入session
 				session.setAttribute(Const.SESSION_USERNAME, USERNAME);	
-				
-				
-
+				List<Menu> allmenuList = new ArrayList<Menu>();
+				allmenuList = this.getAttributeMenu(session, USERNAME, roleRights);			//菜单缓存
+				List<Menu> menuList = new ArrayList<Menu>();
+				menuList = this.changeMenuF(allmenuList, session, USERNAME, changeMenu);	//切换菜单
+				if(null == session.getAttribute(USERNAME + Const.SESSION_QX)){
+					session.setAttribute(USERNAME + Const.SESSION_QX, this.getUQX(USERNAME));//按钮权限放到session中
+				}
+				this.getRemortIP(USERNAME);	//更新登录IP
 				mv.setViewName("system/index/main");
+				mv.addObject("user", user);
+				mv.addObject("menuList", menuList);
 			} else {
 				mv.setViewName("system/index/login");// session失效后跳转登录页面
 			}
@@ -187,6 +200,46 @@ public class LoginController extends BaseController {
 		}
 
 		return mv;
+	}
+	
+	/**切换菜单处理
+	 * @param allmenuList
+	 * @param session
+	 * @param USERNAME
+	 * @param changeMenu
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Menu> changeMenuF(List<Menu> allmenuList, Session session, String USERNAME, String changeMenu){
+		List<Menu> menuList = new ArrayList<Menu>();
+		String flag = (String) session.getAttribute(USERNAME + Const.SESSION_menuList);
+		if(null == session.getAttribute(USERNAME + Const.SESSION_menuList) || ("yes".equals(changeMenu))){
+			List<Menu> menuList1 = new ArrayList<Menu>();
+			List<Menu> menuList2 = new ArrayList<Menu>();
+			for(int i=0;i<allmenuList.size();i++){//拆分菜单
+				Menu menu = allmenuList.get(i);
+				if("1".equals(menu.getMENU_TYPE())){
+					menuList1.add(menu);
+				}else{
+					menuList2.add(menu);
+				}
+			}
+			session.removeAttribute(USERNAME + Const.SESSION_menuList);
+			if("2".equals(session.getAttribute("changeMenu"))){
+				session.setAttribute(USERNAME + Const.SESSION_menuList, menuList1);
+				session.removeAttribute("changeMenu");
+				session.setAttribute("changeMenu", "1");
+				menuList = menuList1;
+			}else{
+				session.setAttribute(USERNAME + Const.SESSION_menuList, menuList2);
+				session.removeAttribute("changeMenu");
+				session.setAttribute("changeMenu", "2");
+				menuList = menuList2;
+			}
+		}else{
+			menuList = (List<Menu>)session.getAttribute(USERNAME + Const.SESSION_menuList);
+		}
+		return menuList;
 	}
 	
 	/**菜单缓存
@@ -291,4 +344,52 @@ public class LoginController extends BaseController {
 		mv.setViewName("system/index/default");
 		return mv;
 	}
+	
+	/**获取用户权限
+	 * @param session
+	 * @return
+	 */
+	public Map<String, String> getUQX(String USERNAME){
+		PageData pd = new PageData();
+		Map<String, String> map = new HashMap<String, String>();
+		try {
+			pd.put(Const.SESSION_USERNAME, USERNAME);
+			pd.put("ROLE_ID", userService.findByUsername(pd).get("ROLE_ID").toString());//获取角色ID
+			pd = roleService.findObjectById(pd);										//获取角色信息														
+			map.put("adds", pd.getString("ADD_QX"));	//增
+			map.put("dels", pd.getString("DEL_QX"));	//删
+			map.put("edits", pd.getString("EDIT_QX"));	//改
+			map.put("chas", pd.getString("CHA_QX"));	//查
+			List<PageData> buttonQXnamelist = new ArrayList<PageData>();
+			if("admin".equals(USERNAME)){
+				//buttonQXnamelist = fhbuttonService.listAll(pd);					//admin用户拥有所有按钮权限
+			}else{
+				//buttonQXnamelist = buttonrightsService.listAllBrAndQxname(pd);	//此角色拥有的按钮权限标识列表
+			}
+			for(int i=0;i<buttonQXnamelist.size();i++){
+				map.put(buttonQXnamelist.get(i).getString("QX_NAME"),"1");		//按钮权限
+			}
+		} catch (Exception e) {
+			//logger.error(e.toString(), e);
+		}	
+		return map;
+	}
+	
+	/** 更新登录用户的IP
+	 * @param USERNAME
+	 * @throws Exception
+	 */
+	public void getRemortIP(String USERNAME) throws Exception {  
+		PageData pd = new PageData();
+		HttpServletRequest request = this.getRequest();
+		String ip = "";
+		if (request.getHeader("x-forwarded-for") == null) {  
+			ip = request.getRemoteAddr();  
+	    }else{
+	    	ip = request.getHeader("x-forwarded-for");  
+	    }
+		pd.put("USERNAME", USERNAME);
+		pd.put("IP", ip);
+		userService.saveIP(pd);
+	} 
 }
