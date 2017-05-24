@@ -212,7 +212,6 @@ public class LoginController extends BaseController {
 	@SuppressWarnings("unchecked")
 	public List<Menu> changeMenuF(List<Menu> allmenuList, Session session, String USERNAME, String changeMenu){
 		List<Menu> menuList = new ArrayList<Menu>();
-		String flag = (String) session.getAttribute(USERNAME + Const.SESSION_menuList);
 		if(null == session.getAttribute(USERNAME + Const.SESSION_menuList) || ("yes".equals(changeMenu))){
 			List<Menu> menuList1 = new ArrayList<Menu>();
 			List<Menu> menuList2 = new ArrayList<Menu>();
