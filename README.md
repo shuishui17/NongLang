@@ -2,6 +2,49 @@
 
 Spring + Spring Mvc + Mybatis 搭建 JavaWeb 项目。
 
+# 接受页面数据
+
+使用 **Map properties = request.getParameterMap();**，获取页面的参数。
+
+以键值对的形式存储页面传递过来的数据，key 表示参数名称，value 为参数值，最终返回一个充满数据的 map。
+
+传递参数即传递这个充满数据的 map 即可，具体代码如下所示：
+
+```
+public PageData(HttpServletRequest request){
+		this.request = request;
+		//获取前端页面参数，返回 Map<String,String[]>
+		Map properties = request.getParameterMap();
+		Map returnMap = new HashMap();
+		//先返回Map.Entry的实例集
+		Iterator entries = properties.entrySet().iterator();
+		//表示Map中的一个实体（一个key-value对）
+		Map.Entry entry;
+		String name = "";
+		String value = "";
+		while(entries.hasNext()){
+			//获取Map实例
+			entry = (Map.Entry) entries.next();
+			//Map的key即为参数名称
+			name = (String) entry.getKey();
+			Object valueObj = entry.getValue(); 
+			if(null == valueObj){ 
+				value = ""; 
+			}else if(valueObj instanceof String[]){ 
+				String[] values = (String[])valueObj;
+				for(int i=0;i<values.length;i++){ 
+					 value = values[i] + ",";
+				}
+				value = value.substring(0, value.length()-1); 
+			}else{
+				value = valueObj.toString(); 
+			}
+			returnMap.put(name, value); 
+		}
+		map = returnMap;
+	}
+```
+
 # shiro 完成认证和授权
 
 利用BigInteger对权限进行2的权的和计算
